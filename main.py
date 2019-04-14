@@ -1,0 +1,174 @@
+import numpy as np
+LOG_LEVEL=0
+def log_debug(txt):
+	global LOG_LEVEL
+	if LOG_LEVEL==1:
+		print(txt)
+
+##################
+# CHOICE NETWORK #
+#################
+		
+def active(x):
+	return x
+
+def dactive(x):
+	return np.ones(x.shape)
+	
+def loss(output,groundtrue):
+	return (output-groundtrue)**2
+
+def dloss(output,groundtrue):
+	return 2*(output-groundtrue)
+
+def addbias(x):
+    return np.concatenate((np.ones(1,),x),axis=0)
+
+def rmbias(x):
+    return x[:1]
+
+def dot(x1,x2):
+    return np.dot(x1,x2)
+
+def multiply(x1,x2):
+    return np.multiply(x1,x2)
+
+def transpose_vector(x):
+    return np.array([x]).T
+
+####################
+# HYPER PARAMETERS #
+####################
+hidden_layer_size=5
+batch_size=10
+
+##################
+# CREATE DATASET #
+##################
+
+nb_x=100
+nb_features=2 # input size
+nb_labels=1 # output size
+X=np.random.uniform(-0.5,+0.5,(nb_x,nb_features))
+Y=X[:,0]
+
+input_layer_size=nb_features
+
+###################
+# INITIALISATION  #
+###################
+w1_shape=((input_layer_size + 1),hidden_layer_size)
+w2_shape=((hidden_layer_size+1,nb_labels))
+w1=np.random.normal(0.,+0.25,w1_shape)
+w2=np.random.normal(0.,+0.25,w2_shape)
+
+w1_grad=np.zeros(w1.shape)
+w2_grad=np.zeros(w2.shape)
+
+iteration=1000
+
+############
+# TRAINING #
+############
+"""
+FORWARD :
+couche d'input :
+a0=input
+
+couche cache :
+a1b=concat(a0,1)
+a1=a1b*w1
+z1=activ(a1)
+
+couche d'output :
+a2b=concat(z1,1)
+a2=a2b*w2
+z2=activ(a2)
+
+afficher loss(z2,y)
+
+COMPUTE ERROR CONTRIBUTION (DELTA) :
+
+couche 2 :
+loss(z2)->dloss(z2)
+w1_delta=dloss(z2)
+
+couche 1 :
+loss(active(z1*w2)) -> dloss(active(z1*w2))*dactive(z1*w2)*w2  # chain rule principle
+w2_delta=w1_delta*dactive(z1*w2)*w2
+
+COMPUTE GRADIENTS :
+w1_grads=2*a1b*w1_delta
+w2_grads=2*a2b*w2_delta
+
+Demonstration : w_delta=d(loss_layer)/d(W)=dloss_layer(W)
+loss_layer(W)=(y-W*xb)**2 
+= y**2-2*y*(W*xb)+(W*xb)**2                       | regarding formula : (a*b)**2=(a**2)*(b**2)
+= y**2 - 2*y*W*xb + (W**2)*(xb)**2
+d(loss_layer)/d(W)=  - 2*y*xb   + 2*W * (xb)**2   | regarding formula : derivative a*x**2 -> a*2*x
+= 2 * (W*(xb)**2  - y*xb  )
+= 2 * xb * (W*xb - y)
+=2*xb*(W*xb-y)
+
+EFFECTIVELY UPDATE WEIGHTS
+regarding formula of gradient descent : w=w-lr*f'(w)
+w1=w1 - w1_grad*lr
+w2=w2 - w2_grad*lr
+
+"""
+cumul_loss=0
+lr=1e-5
+
+for epoch in range(1000): # for each epoch
+    for id_sample in range(nb_x): # for each data
+    
+        ###########
+        # FORWARD #
+        ###########
+        a1=X[id_sample]
+
+        # couche 1 (layer hidden)
+        a1b=addbias(a1)
+        a2=np.dot(a1b,w1)
+        z1=active(a2)
+
+        # couche 2 (output layer)
+        a2b=addbias(z1)
+        a3=np.dot(a2b,w2)
+        z2=active(a3)
+
+
+        #################
+        # COMPUTE DELTA #
+        #################
+        
+        # couche 2
+        delta_loss=dloss(z2,Y[id_sample])
+        w2_delta=delta_loss
+
+        # couche 1
+        delta_a2b=multiply(dot(w2,w2_delta),dactive(a3))
+        w1_delta=rmbias(delta_a2b)
+
+        #####################
+        # COMPUTE GRADIENTS #
+        #####################
+        w1_grad=w1_grad+w1_delta*2*transpose_vector(a1b) # w1_grad must be (5,3)=(5,3)+(1,5)*(3,1)
+        w2_grad=w2_grad+w2_delta*2*transpose_vector(a2b) # w2_grad must be 6,1 = (6,1)+(6,1)
+        
+    
+        
+        #################################
+        # UPDATE WEIGHTS WITH GRADIENTS #
+        #################################
+        if (id_sample%batch_size==0 and id_sample!=0) or id_sample==nb_x:
+            w1=w1 - w1_grad*lr
+            w2=w2 - w2_grad*lr
+            # reset gradients to the next batch
+            w1_grad=np.zeros(w1_grad.shape)
+            w2_grad=np.zeros(w2_grad.shape)
+        
+        cumul_loss+= loss(z2,Y[id_sample]) # compute loss to debug purpose
+    print(cumul_loss)
+    cumul_loss=0
+        
