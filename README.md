@@ -1,9 +1,6 @@
 <h1> Simple neural network with numpy </h1>
 
-It can helps student to understand computing, specially back propagation which is not always intuitive.
-This example is a very simple multi layer perceptron that learns with SGD (Stochastic Gradient Descent).
-
-A lot of implementation on the internet presents errors, for example forgetting the bias in formula. 
+The goal of this project is purely academic, it helps student to understand computing, specially back propagation which is not always intuitive.  This example is a very simple multi layer perceptron that learns with SGD (Stochastic Gradient Descent). A lot of implementation on the internet presents errors, for example forgetting the bias in formula. 
 
 
 <hr/>
