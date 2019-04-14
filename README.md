@@ -1,3 +1,5 @@
+<h1> Simple neural network with numpy </h1>
+
 This example is a very simple multi layer perceptron that learns with SGD.
 For the learning part:
 * SGD : https://en.wikipedia.org/wiki/Stochastic_gradient_descent
