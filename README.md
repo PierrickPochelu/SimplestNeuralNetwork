@@ -1,6 +1,6 @@
 <h1> Simple neural network with numpy </h1>
 
- This example is a very simple multi layer perceptron that learns with SGD (Stochastic Gradient Descent).
+ This example is a tiny multi layer perceptron that learns with SGD (Stochastic Gradient Descent).
 
 <hr/>
 
