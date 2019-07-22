@@ -15,12 +15,13 @@ Source:
 <h2>For the learning part:</h2>
 The neural network is update by gradient descent principle. After each batch of data, derivative of the loss is computed to update weights in right direction.
 Source:
-* Chain rule principle (to compute error's contribution to each weight) : https://en.wikipedia.org/wiki/Chain_rule
-* Automatic Differentiation : https://en.wikipedia.org/wiki/Automatic_differentiation
-* Gradient Descent : https://en.wikipedia.org/wiki/Gradient_descent
-* Stochastic Gradient Descent : https://en.wikipedia.org/wiki/Stochastic_gradient_descent
-* Back propagation : https://en.wikipedia.org/wiki/Backpropagation
-
+<ul>
+<li> Chain rule principle (to compute error's contribution to each weight) : https://en.wikipedia.org/wiki/Chain_rule </li>
+<li> Automatic Differentiation : https://en.wikipedia.org/wiki/Automatic_differentiation </li>
+<li> Gradient Descent : https://en.wikipedia.org/wiki/Gradient_descent </li>
+<li> Stochastic Gradient Descent : https://en.wikipedia.org/wiki/Stochastic_gradient_descent </li>
+<li> Back propagation : https://en.wikipedia.org/wiki/Backpropagation </li>
+</ul>
 
 
 <h2> Other implementation </h2>
