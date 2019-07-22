@@ -5,9 +5,9 @@ def log_debug(txt):
 	if LOG_LEVEL==1:
 		print(txt)
 
-##################
-# CHOICE NETWORK #
-#################
+############################
+# NEURAL NETWORK FUNCTIONS #
+############################
 		
 def active(x):
 	# return x # linear
@@ -43,17 +43,17 @@ def transpose_vector(x):
 ####################
 hidden_layer_size=5
 batch_size=10
+lr=1e-5
 
-##################
-# CREATE DATASET #
-##################
+######################
+# SYNTHETIC DATASET #
+######################
 
 nb_x=100
 nb_features=2 # input size
 nb_labels=1 # output size
 X=np.random.uniform(-0.5,+0.5,(nb_x,nb_features))
 Y=X[:,0]
-
 input_layer_size=nb_features
 
 ###################
@@ -67,7 +67,7 @@ w2=np.random.normal(0.,+0.25,w2_shape)
 w1_grad=np.zeros(w1.shape)
 w2_grad=np.zeros(w2.shape)
 
-iteration=1000
+
 
 ############
 # TRAINING #
@@ -119,7 +119,7 @@ w2=w2 - w2_grad*lr
 
 """
 cumul_loss=0
-lr=1e-5
+
 
 for epoch in range(1000): # for each epoch
     for id_sample in range(nb_x): # for each data
@@ -163,7 +163,7 @@ for epoch in range(1000): # for each epoch
         #################################
         # UPDATE WEIGHTS WITH GRADIENTS #
         #################################
-        if (id_sample%batch_size==0 and id_sample!=0) or id_sample==nb_x:
+        if (id_sample%batch_size==0 and id_sample!=0) or id_sample==nb_x: # call it for each batch
             w1=w1 - w1_grad*lr
             w2=w2 - w2_grad*lr
             # reset gradients to the next batch
