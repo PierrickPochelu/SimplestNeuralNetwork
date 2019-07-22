@@ -10,10 +10,12 @@ def log_debug(txt):
 #################
 		
 def active(x):
-	return x
+	# return x # linear
+	return np.where(x <= 0, 0, x)  # relu
 
 def dactive(x):
-	return np.ones(x.shape)
+	#return np.ones(x.shape) # derivative linear
+	return np.where(x <= 0, 0, 1) # derivate relu. Warning x=0 is not derivable.
 	
 def loss(output,groundtrue):
 	return (output-groundtrue)**2
